@@ -52,7 +52,7 @@ class Customer
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity=Invoice::class, mappedBy="customer")
+     * @ORM\OneToMany(targetEntity=Invoice::class, mappedBy="customer", orphanRemoval=true)
      * @Groups("customer:read")
      */
     private $invoices;
