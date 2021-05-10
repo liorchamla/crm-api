@@ -5,15 +5,31 @@ namespace App\DataFixtures;
 use App\Entity\BlogPost;
 use App\Entity\Customer;
 use App\Entity\Invoice;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordEncoderInterface $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
+
+        $user = new User;
+
+        $user->setEmail("admin@mail.com")
+            ->setPassword($this->encoder->encodePassword($user, 'p4ssword'));
+
+        $manager->persist($user);
 
         for ($c = 0; $c < 100; $c++) {
             $customer = new Customer;
